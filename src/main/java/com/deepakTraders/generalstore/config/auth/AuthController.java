@@ -2,7 +2,7 @@ package com.deepakTraders.generalstore.config.auth;
 
 import com.deepakTraders.generalstore.config.CustomeUserDetailsService;
 import com.deepakTraders.generalstore.config.JWTSecurity.JwtService;
-import com.deepakTraders.generalstore.dtos.reqDtos.CreateNewUserDto;
+import com.deepakTraders.generalstore.dtos.reqDtos.CreateNewUserDTO;
 import com.deepakTraders.generalstore.exceptions.UserException;
 import com.deepakTraders.generalstore.models.AuthRequest;
 import com.deepakTraders.generalstore.models.AuthResponse;
@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +42,7 @@ public class AuthController {
     private CustomeUserDetailsService customeUserDetailsService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createNewUser(@RequestBody CreateNewUserDto userDto) throws UserException {
+    public ResponseEntity<?> createNewUser(@RequestBody CreateNewUserDTO userDto) throws UserException {
 
         String email = userDto.getEmail();
         String password = userDto.getPassword();
@@ -52,7 +51,7 @@ public class AuthController {
             Optional<User> isUserExistWithThisEmail = userRepository.findByEmail(email);
 
             if(isUserExistWithThisEmail.isPresent()) {
-                throw new UserException("Email is Already in use With Another Account");
+                throw new UserException("This Email is Already in use With Another Account");
             }
 
             // convert userDto to User obj by userTransformers

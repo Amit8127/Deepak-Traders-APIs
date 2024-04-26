@@ -3,7 +3,7 @@ package com.deepakTraders.generalstore.dtos.reqDtos;
 import lombok.Data;
 
 @Data
-public class CreateNewUserDto {
+public class CreateNewUserDTO {
 
     private String firstName;
     private String lastName;

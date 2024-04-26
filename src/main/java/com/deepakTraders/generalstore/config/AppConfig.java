@@ -23,48 +23,27 @@ public class AppConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-//        // Disable CSRF, set up URL-based authorization, handle exceptions, and configure session management
-//        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors -> cors
-//                        .configurationSource(request -> {
-//                            CorsConfiguration corsConfiguration = new CorsConfiguration();
-//                            corsConfiguration.setAllowCredentials(true);
-//                            corsConfiguration.addAllowedOriginPattern("*"); // * for testing and local
-//                            corsConfiguration.addAllowedHeader("Authorization");
-//                            corsConfiguration.addAllowedHeader("Content-Type");
-//                            corsConfiguration.addAllowedHeader("Accept");
-//                            corsConfiguration.addAllowedMethod("*");
-//                            corsConfiguration.setMaxAge(3600L);
-//                            return corsConfiguration;
-//                        }))
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/**").authenticated().anyRequest().permitAll())
-////                .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//        // Add JWT Authentication Filter before UsernamePasswordAuthenticationFilter
-////        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-//        return httpSecurity.build();
+        // Disable CSRF, set up URL-based authorization, handle exceptions, and configure session management
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
-                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class).csrf().disable()
-                .cors().configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+            .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+            .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class).csrf().disable()
+            .cors().configurationSource(new CorsConfigurationSource() {
+                @Override
+                public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
-                        CorsConfiguration corsConfiguration = new CorsConfiguration();
+                    CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-                        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // frontend URLs to access this backend
-                        corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-                        corsConfiguration.setAllowCredentials(true);
-                        corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
-                        corsConfiguration.setExposedHeaders(Arrays.asList(JwtConstant.JWT_HEADER));
-                        corsConfiguration.setMaxAge(3600L);
-                        return corsConfiguration;
-                    }
-                })
-                .and().httpBasic().and().formLogin();
-                return httpSecurity.build();
+                    corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // frontend URLs to access this backend
+                    corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+                    corsConfiguration.setAllowCredentials(true);
+                    corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
+                    corsConfiguration.setExposedHeaders(Arrays.asList(JwtConstant.JWT_HEADER));
+                    corsConfiguration.setMaxAge(3600L);
+                    return corsConfiguration;
+                }
+            })
+            .and().httpBasic().and().formLogin();
+            return httpSecurity.build();
     }
 
     @Bean
